@@ -3,30 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Игра в Telegram</title>
+    <title>Ферма в Telegram</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             text-align: center;
             padding: 50px;
+            background-color: #f0f0f0;
         }
-        .game-button {
-            padding: 15px 30px;
+        .farm-container {
+            margin-top: 30px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .farm-container h2 {
+            margin-bottom: 20px;
+        }
+        .farm-container p {
             font-size: 18px;
-            background-color: #007BFF;
+        }
+        .farm-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #28a745;
             color: white;
             border: none;
             cursor: pointer;
+            border-radius: 5px;
+        }
+        .farm-button:disabled {
+            background-color: #ccc;
+        }
+        #message {
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
-    <h1>Добро пожаловать в игру!</h1>
-    <button class="game-button" id="startGameButton">Начать игру</button>
+    <h1>Добро пожаловать на ферму!</h1>
+    <div class="farm-container">
+        <h2>Твои растения</h2>
+        <p id="farmStatus">Почти нет растений, пора начать!</p>
+        <button class="farm-button" id="waterButton">Полить растения</button>
+        <button class="farm-button" id="harvestButton" disabled>Собрать урожай</button>
+        <div id="message"></div>
+    </div>
 
     <script>
-        document.getElementById("startGameButton").onclick = function() {
-            alert("Игра началась!");
+        let isWatered = false;  // Статус, политы ли растения
+        let canHarvest = false; // Статус, можно ли собрать урожай
+
+        document.getElementById("waterButton").onclick = function() {
+            if (!isWatered) {
+                isWatered = true;
+                canHarvest = true;
+                document.getElementById("message").textContent = "Растения политы, теперь можно собирать урожай!";
+                document.getElementById("harvestButton").disabled = false;
+                document.getElementById("farmStatus").textContent = "Растения политы. Подождите, пока они не вырастут!";
+            }
+        };
+
+        document.getElementById("harvestButton").onclick = function() {
+            if (canHarvest) {
+                document.getElementById("message").textContent = "Вы собрали урожай! Поздравляем!";
+                canHarvest = false;
+                isWatered = false;
+                document.getElementById("waterButton").disabled = false;
+                document.getElementById("harvestButton").disabled = true;
+                document.getElementById("farmStatus").textContent = "Урожай собран. Засейте новые растения!";
+            }
         };
     </script>
 </body>
