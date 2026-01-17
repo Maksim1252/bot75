@@ -1,0 +1,36 @@
+name: Update Bot and Deploy to GitHub
+
+on:
+  push:
+    branches:
+      - main  # Когда происходит push в ветку main (или master)
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'  # Установите нужную версию Python, например, 3.8
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pyTelegramBotAPI
+
+    - name: Run the bot
+      run: |
+        python bot.py  # Запуск скрипта с ботом
+
+    - name: Commit changes
+      run: |
+        git config --global user.name "github-actions"
+        git config --global user.email "github-actions@github.com"
+        git add .
+        git commit -m "Automatic update of bot data"
+        git push
